@@ -1,0 +1,13 @@
+# Общее
+node_modules/
+.env
+*.log
+dist/
+
+# Frontend
+frontend/build/
+frontend/.cache
+
+# Backend
+backend/.env
+backend/dist/
