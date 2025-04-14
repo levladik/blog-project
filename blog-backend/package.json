@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/index.ts",
+    "watch": "nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +13,7 @@
   "description": "",
   "dependencies": {
     "@types/node": "^22.14.1",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
