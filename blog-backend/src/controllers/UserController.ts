@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { DataSource } from 'typeorm';
 import { UserRepository } from '../repositories/UserRepository';
 import { PostRepository } from '../repositories/PostRepository';
@@ -23,7 +23,7 @@ export class UserController {
     }
 
     // Получить пользователя по ID
-    async getUserById(req: Request, res: Response) {
+    async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const user = await this.userRepository.findOneById(id);
@@ -39,7 +39,7 @@ export class UserController {
     }
 
     // Создать нового пользователя
-    async createUser(req: Request, res: Response) {
+    async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { firstName, lastName } = req.body;
 
@@ -55,7 +55,7 @@ export class UserController {
     }
 
     // Обновить пользователя
-    async updateUser(req: Request, res: Response) {
+    async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const { firstName, lastName } = req.body;
@@ -73,7 +73,7 @@ export class UserController {
     }
 
     // Удалить пользователя
-    async deleteUser(req: Request, res: Response) {
+    async deleteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const success = await this.userRepository.delete(id);
@@ -89,7 +89,7 @@ export class UserController {
     }
 
     // Создать пост для пользователя
-    async createUserPost(req: Request, res: Response) {
+    async createUserPost(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = parseInt(req.params.userId);
             const { title, content } = req.body;

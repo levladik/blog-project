@@ -39,7 +39,7 @@ export class PostController {
     }
 
     // Создать новый пост
-    async createPost(req: Request, res: Response) {
+    async createPost(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { title, content, userId } = req.body;
 
@@ -62,7 +62,7 @@ export class PostController {
     }
 
     // Обновить пост
-    async updatePost(req: Request, res: Response) {
+    async updatePost(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const { title, content } = req.body;
@@ -83,7 +83,7 @@ export class PostController {
     }
 
     // Удалить пост
-    async deletePost(req: Request, res: Response) {
+    async deletePost(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const success = await this.postRepository.delete(id);
