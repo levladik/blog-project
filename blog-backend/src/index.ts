@@ -18,7 +18,7 @@ async function main() {
         await userRepository.save(user);
         console.log("Saved a new user with id: ", user.id);
         
-        const users = await userRepository.find();
+        const users = await userRepository.find({relations: ["posts"]});
         console.log("Loaded users: ", users);
         
     } catch (err) {

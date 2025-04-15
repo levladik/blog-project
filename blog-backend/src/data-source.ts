@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { User } from "./entity/User";
+import { Post } from "./entity/Post";
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME || "blog_db",
     synchronize: true,
     logging: true,
-    entities: [User], // Все сущности нужно регистрировать здесь
+    entities: [User, Post], // Все сущности нужно регистрировать здесь
     migrations: [],
     subscribers: [],
 });
