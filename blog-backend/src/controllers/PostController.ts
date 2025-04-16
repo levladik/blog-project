@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { DataSource } from 'typeorm';
 import { PostRepository } from '../repositories/PostRepository';
 import { UserRepository } from '../repositories/UserRepository';
@@ -44,7 +44,7 @@ export class PostController {
             const { title, content, userId } = req.body;
 
             if (!title || !content || !userId) {
-                return res.status(400).json({ 
+                res.status(400).json({ 
                     message: 'Title, content and userId are required' 
                 });
             }
@@ -73,7 +73,7 @@ export class PostController {
             });
 
             if (!updatedPost) {
-                return res.status(404).json({ message: 'Post not found' });
+                res.status(404).json({ message: 'Post not found' });
             }
 
             res.json(updatedPost);
@@ -89,7 +89,7 @@ export class PostController {
             const success = await this.postRepository.delete(id);
 
             if (!success) {
-                return res.status(404).json({ message: 'Post not found' });
+                res.status(404).json({ message: 'Post not found' });
             }
 
             res.status(204).send();

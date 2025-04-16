@@ -29,7 +29,7 @@ export class UserController {
             const user = await this.userRepository.findOneById(id);
 
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                res.status(404).json({ message: 'User not found' });
             }
 
             res.json(user);
@@ -44,7 +44,7 @@ export class UserController {
             const { firstName, lastName } = req.body;
 
             if (!firstName || !lastName) {
-                return res.status(400).json({ message: 'First name and last name are required' });
+                res.status(400).json({ message: 'First name and last name are required' });
             }
 
             const newUser = await this.userRepository.create({ firstName, lastName });
@@ -63,7 +63,7 @@ export class UserController {
             const updatedUser = await this.userRepository.update(id, { firstName, lastName });
 
             if (!updatedUser) {
-                return res.status(404).json({ message: 'User not found' });
+                res.status(404).json({ message: 'User not found' });
             }
 
             res.json(updatedUser);
@@ -79,7 +79,7 @@ export class UserController {
             const success = await this.userRepository.delete(id);
 
             if (!success) {
-                return res.status(404).json({ message: 'User not found' });
+                res.status(404).json({ message: 'User not found' });
             }
 
             res.status(204).send();
@@ -95,7 +95,7 @@ export class UserController {
             const { title, content } = req.body;
 
             if (!title || !content) {
-                return res.status(400).json({ message: 'Title and content are required' });
+                res.status(400).json({ message: 'Title and content are required' });
             }
 
             const newPost = await this.postRepository.create({
