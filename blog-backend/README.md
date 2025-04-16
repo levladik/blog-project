@@ -17,7 +17,7 @@ A Node.js/TypeScript backend service for a blogging platform using Express and T
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/blog-project.git
+git clone https://github.com/levladik/blog-project.git
 cd blog-project/blog-backend
 ```
 
