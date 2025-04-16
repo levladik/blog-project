@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { DataSource } from 'typeorm';
 import { PostController } from '../controllers/PostController';
 
-export const createPostRoutes = (dataSource: DataSource) => {
+const createPostRoutes = (dataSource: DataSource) => {
   const router = Router();
   const postController = new PostController(dataSource);
 
@@ -13,4 +13,8 @@ export const createPostRoutes = (dataSource: DataSource) => {
   router.delete('/:id', postController.deletePost.bind(postController));
 
   return router;
-};
+  };
+  
+  export default createPostRoutes;
+
+

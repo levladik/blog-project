@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { DataSource } from 'typeorm';
 import { UserController } from '../controllers/UserController';
 
-export const createUserRoutes = (dataSource: DataSource) => {
+const createUserRoutes = (dataSource: DataSource) => {
   const router = Router();
   const userController = new UserController(dataSource);
 
@@ -21,3 +21,5 @@ export const createUserRoutes = (dataSource: DataSource) => {
 
   return router;
 };
+
+export default createUserRoutes;
