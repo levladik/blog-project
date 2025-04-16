@@ -1,29 +1,12 @@
-import "reflect-metadata";
+import express from "express";
+import userRoutes from "./routes/user.routes";
+import postRoutes from "./routes/post.routes";
 import { AppDataSource } from "./data-source";
-import { User } from "./entity/User";
 
-async function main() {
-    try {
-        // Инициализация подключения
-        await AppDataSource.initialize();
-        console.log("Data Source has been initialized!");
+const app = express()
+app.use(express.json())
 
-        // Работа с репозиторием
-        const userRepository = AppDataSource.getRepository(User);
-        
-        const user = new User();
-        user.firstName = "John";
-        user.lastName = "Doe";
-        
-        await userRepository.save(user);
-        console.log("Saved a new user with id: ", user.id);
-        
-        const users = await userRepository.find({relations: ["posts"]});
-        console.log("Loaded users: ", users);
-        
-    } catch (err) {
-        console.error("Error during Data Source initialization:", err);
-    }
-}
+app.use("/users", userRoutes(AppDataSource))
+app.use("/posts", postRoutes(AppDataSource)) 
 
-main();
+export default app;
