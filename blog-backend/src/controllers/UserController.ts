@@ -30,6 +30,7 @@ export class UserController {
 
             if (!user) {
                 res.status(404).json({ message: 'User not found' });
+                return;
             }
 
             res.json(user);
@@ -45,6 +46,7 @@ export class UserController {
 
             if (!firstName || !lastName) {
                 res.status(400).json({ message: 'First name and last name are required' });
+                return;
             }
 
             const newUser = await this.userRepository.create({ firstName, lastName });
@@ -64,9 +66,14 @@ export class UserController {
 
             if (!updatedUser) {
                 res.status(404).json({ message: 'User not found' });
+                return;
             }
 
-            res.json(updatedUser);
+            res.status(200).json({
+                id: updatedUser.id,
+                firstName: updatedUser.firstName,
+                lastName: updatedUser.lastName
+            });
         } catch (error) {
             res.status(500).json({ message: 'Error updating user', error });
         }
@@ -96,6 +103,7 @@ export class UserController {
 
             if (!title || !content) {
                 res.status(400).json({ message: 'Title and content are required' });
+                return;
             }
 
             const newPost = await this.postRepository.create({
@@ -104,7 +112,12 @@ export class UserController {
                 userId
             });
 
-            res.status(201).json(newPost);
+            res.status(201).json({
+                id: newPost.id,
+                title: newPost.title,
+                content: newPost.content,
+                userId: newPost.userId
+            });
         } catch (error) {
             res.status(500).json({ message: 'Error creating post', error });
         }
