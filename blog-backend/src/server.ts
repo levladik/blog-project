@@ -7,8 +7,8 @@ const app = express();
 
 // Подключение роутов
 app.use(express.json());
-app.use('/api/users', createUserRoutes(AppDataSource));
-app.use('/api/posts', createPostRoutes(AppDataSource));
+app.use('/users', createUserRoutes(AppDataSource));
+app.use('/posts', createPostRoutes(AppDataSource));
 
 // Запуск сервера
 AppDataSource.initialize()
