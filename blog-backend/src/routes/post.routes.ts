@@ -9,6 +9,7 @@ const createPostRoutes = (dataSource: DataSource) => {
   // Основные CRUD операции для постов
   router.get('/', postController.getAllPosts.bind(postController));
   router.post('/', postController.createPost.bind(postController));
+  router.get('/:id', postController.getPostById.bind(postController));
   router.put('/:id', postController.updatePost.bind(postController));
   router.delete('/:id', postController.deletePost.bind(postController));
 

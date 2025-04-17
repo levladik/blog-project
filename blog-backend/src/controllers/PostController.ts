@@ -23,13 +23,13 @@ export class PostController {
     }
 
     // Получить пост по ID
-    async getPostById(req: Request, res: Response) {
+    async getPostById(req: Request, res: Response): Promise<void> {
         try {
             const id = parseInt(req.params.id);
             const post = await this.postRepository.findOneById(id);
 
             if (!post) {
-                return res.status(404).json({ message: 'Post not found' });
+                res.status(404).json({ message: 'Post not found' });
             }
 
             res.json(post);
