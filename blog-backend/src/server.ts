@@ -4,6 +4,14 @@ import createPostRoutes from './routes/post.routes';
 import { AppDataSource } from './data-source';
 
 const app = express();
+import cors from 'cors';
+
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Подключение роутов
 app.use(express.json());

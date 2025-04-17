@@ -1,5 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../entity/User';
+import { Post } from '../entity/Post';
 
 export class UserRepository {
   private readonly repository: Repository<User>;
@@ -29,8 +30,16 @@ export class UserRepository {
     return this.findOneById(id)
  }
 
- async delete(id: number): Promise<boolean> {
-  const result = await this.repository.delete(id);
-  return result.affected !== 0;
-}
+  async delete(id: number): Promise<boolean> {
+    // First delete all user's posts
+    await this.dataSource.getRepository(Post)
+      .createQueryBuilder()
+      .delete()
+      .where("userId = :id", { id })
+      .execute();
+
+    // Then delete the user
+    const result = await this.repository.delete(id);
+    return result.affected !== 0;
+  }
 }

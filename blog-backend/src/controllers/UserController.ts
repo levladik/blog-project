@@ -12,17 +12,15 @@ export class UserController {
         this.postRepository = new PostRepository(dataSource);
     }
 
-    // Получить всех пользователей
     async getAllUsers(req: Request, res: Response) {
         try {
             const users = await this.userRepository.findAll();
             res.json(users);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching users', error });
+        } catch (error: any) {
+            res.status(500).json({ message: 'Error fetching users', error: error.message });
         }
     }
 
-    // Получить пользователя по ID
     async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
@@ -34,12 +32,11 @@ export class UserController {
             }
 
             res.json(user);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching user', error });
+        } catch (error: any) {
+            res.status(500).json({ message: 'Error fetching user', error: error.message });
         }
     }
 
-    // Создать нового пользователя
     async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { firstName, lastName } = req.body;
@@ -51,12 +48,11 @@ export class UserController {
 
             const newUser = await this.userRepository.create({ firstName, lastName });
             res.status(201).json(newUser);
-        } catch (error) {
-            res.status(500).json({ message: 'Error creating user', error });
+        } catch (error: any) {
+            res.status(500).json({ message: 'Error creating user', error: error.message });
         }
     }
 
-    // Обновить пользователя
     async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
@@ -74,12 +70,11 @@ export class UserController {
                 firstName: updatedUser.firstName,
                 lastName: updatedUser.lastName
             });
-        } catch (error) {
-            res.status(500).json({ message: 'Error updating user', error });
+        } catch (error: any) {
+            res.status(500).json({ message: 'Error updating user', error: error.message });
         }
     }
 
-    // Удалить пользователя
     async deleteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = parseInt(req.params.id);
@@ -87,18 +82,22 @@ export class UserController {
 
             if (!success) {
                 res.status(404).json({ message: 'User not found' });
+                return;
             }
 
             res.status(204).send();
-        } catch (error) {
-            res.status(500).json({ message: 'Error deleting user', error });
+        } catch (error: any) {
+            console.error('Database deletion error:', error);
+            res.status(500).json({ 
+                message: 'Cannot delete user with existing posts', 
+                error: error.message 
+            });
         }
     }
 
-    // Создать пост для пользователя
     async createUserPost(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const userId = parseInt(req.params.userId);
+            const userId = parseInt(req.params.id);
             const { title, content } = req.body;
 
             if (!title || !content) {
@@ -118,8 +117,8 @@ export class UserController {
                 content: newPost.content,
                 userId: newPost.userId
             });
-        } catch (error) {
-            res.status(500).json({ message: 'Error creating post', error });
+        } catch (error: any) {
+            res.status(500).json({ message: 'Error creating post', error: error.message });
         }
     }
 }

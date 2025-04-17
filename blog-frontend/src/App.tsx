@@ -1,14 +1,12 @@
-import './styles/App.css'
+import { UserList } from './components/UserList';
+import './styles/App.css';
 
 function App() {
-
   return (
     <>
-      <h1 className="font-bold uppercase">
-        Blog
-      </h1>
+      <UserList refreshTrigger />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
