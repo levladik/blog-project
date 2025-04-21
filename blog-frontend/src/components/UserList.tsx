@@ -38,9 +38,13 @@ export const UserList = ({ refreshTrigger }: UserListProps) => {
       try {
         await deleteUser(userId);
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Deletion error:', error);
-        alert(error.message || 'Failed to delete user');
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert('Failed to delete user');
+        }
       }
     }
   };
