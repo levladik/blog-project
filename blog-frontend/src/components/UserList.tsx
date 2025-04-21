@@ -14,11 +14,7 @@ interface User {
   lastName: string;
 }
 
-interface UserListProps {
-  refreshTrigger: boolean;
-}
-
-export const UserList = ({ refreshTrigger }: UserListProps) => {
+export const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +36,7 @@ export const UserList = ({ refreshTrigger }: UserListProps) => {
     };
 
     fetchUsers();
-  }, [refreshTrigger]);
+  }, [users]);
 
   const handleDelete = async (userId: number) => {
     try {

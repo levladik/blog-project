@@ -14,10 +14,12 @@ export const UserForm = () => {
 
   const addUser = async (userData: { firstName: string; secondName: string }) => {
     try {
-      await createUser({
-        firstName: userData.firstName,
-        lastName: userData.secondName
-      });
+    await createUser({
+      firstName: userData.firstName,
+      lastName: userData.secondName
+    })
+    setFirstName('');
+    setSecondName('');
     } catch (error: unknown) {
       console.error('Error creating user:', error);
       if (error instanceof Error) {
