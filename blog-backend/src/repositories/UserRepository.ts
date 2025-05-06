@@ -16,8 +16,13 @@ export class UserRepository {
     return await this.repository.save(user);
   }
 
+
+  // Fetch user along with their posts using relations
   async findOneById(id: number): Promise<User | null> {
-    return await this.repository.findOneBy({ id });
+    return await this.repository.findOne({
+      where: { id },
+      relations: ['posts'],
+    });
   }
 
   async findAll(): Promise<User[]>
@@ -32,6 +37,7 @@ export class UserRepository {
 
   async delete(id: number): Promise<boolean> {
     // First delete all user's posts
+    // onDeleteCascade
     await this.dataSource.getRepository(Post)
       .createQueryBuilder()
       .delete()

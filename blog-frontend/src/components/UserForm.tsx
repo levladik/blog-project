@@ -6,26 +6,55 @@ import {
   DialogTitle,
 } from '@headlessui/react';
 import { createUser } from '../api/users';
+import { createPost } from '../api/posts';
 
 export const UserForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
+  const [posts, setPosts] = useState<{ title: string; content: string }[]>([]);
+  const [newPost, setNewPost] = useState({ title: '', content: '' });
+  const [createdUserId, setCreatedUserId] = useState<number | null>(null);
 
-  const addUser = async (userData: { firstName: string; secondName: string }) => {
+  const addUser = async (userData: {
+    firstName: string;
+    secondName: string;
+  }) => {
     try {
-    await createUser({
-      firstName: userData.firstName,
-      lastName: userData.secondName
-    })
-    setFirstName('');
-    setSecondName('');
+      const createdUser = await createUser({
+        firstName: userData.firstName,
+        lastName: userData.secondName,
+      });
+      setFirstName('');
+      setSecondName('');
+      setCreatedUserId(createdUser.id);
     } catch (error: unknown) {
       console.error('Error creating user:', error);
       if (error instanceof Error) {
         alert(error.message);
       } else {
         alert('Failed to create user');
+      }
+    }
+  };
+
+  const addPosts = async (userId: number) => {
+    try {
+      await Promise.all(posts.map(post => 
+        createPost({
+          title: post.title,
+          content: post.content,
+          userId: userId
+        })
+      ));
+      setPosts([]);
+      setNewPost({title: '', content: ''});
+    } catch (error: unknown) {
+      console.error('Error creating post:', error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Failed to create post');
       }
     }
   };
@@ -49,7 +78,6 @@ export const UserForm = () => {
             >
               <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
                 <DialogTitle
-                  as='h3'
                   className='text-base font-semibold text-gray-900'
                 >
                   Add user
@@ -98,6 +126,77 @@ export const UserForm = () => {
                       />
                     </div>
                   </div>
+                  {posts.map((post, index) => (
+                    <>
+                      <h2 className='text-gray-800 text-bold mb-3'>
+                        Post {++index}
+                      </h2>
+                      <label
+                        htmlFor='Title'
+                        className='block text-sm/6 font-medium text-gray-900'
+                      >
+                        Title
+                      </label>
+                      <div
+                        key={index}
+                        className='mt-2 mb-4'
+                      >
+                        <div className='flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600'>
+                          <input
+                            id='title'
+                            name='title'
+                            type='text'
+                            placeholder='Title'
+                            required
+                            value={post.title}
+                            onChange={(e) => {
+                              const updatedPosts = [...posts];
+                              updatedPosts[index] = {
+                                ...post,
+                                title: e.target.value
+                              };
+                              setPosts(updatedPosts);
+                            }}
+                            className='block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm'
+                          />
+                        </div>
+                      </div>
+
+                      <label
+                        htmlFor='Content'
+                        className='block text-sm/6 font-medium text-gray-900'
+                      >
+                        Content
+                      </label>
+                      <div
+                        key={index}
+                        className='mt-2 mb-4'
+                      >
+                        <div className='flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600'>
+                          <input
+                            id='content'
+                            name='content'
+                            type='text'
+                            placeholder='Content'
+                            required
+                            value={post.content}
+                            onChange={(e) => {
+                              const updatedPosts = [...posts];
+                              updatedPosts[index] = {
+                                ...post,
+                                content: e.target.value
+                              };
+                              setPosts(updatedPosts);
+                            }}
+                            className='block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm'
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ))}
+                  <button onClick={() => setPosts([...posts, newPost])}>
+                    Add post
+                  </button>
                 </form>
               </div>
               <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
@@ -107,6 +206,9 @@ export const UserForm = () => {
                   onClick={() => {
                     setIsOpen(false);
                     addUser({ firstName, secondName });
+                    if (posts.length > 0 && createdUserId) {
+                      addPosts(createdUserId);
+                    }
                   }}
                 >
                   Save
