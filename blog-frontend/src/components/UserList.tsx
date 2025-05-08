@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Table } from 'antd';
 import { getAllUsers } from '../api/users';
 
-import { User, Post } from './types';
+import { User, Post } from '../types/index';
 
 export const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
