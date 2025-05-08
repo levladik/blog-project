@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Button, Table } from 'antd';
 import { getAllUsers } from '../api/users';
+import { getAllPosts } from '../api/posts';
 
 import { User, Post } from '../types/index';
 
 export const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +22,17 @@ export const UserList = () => {
       }
     };
 
+    const fetchPosts = async () => {
+      try {
+        const data = await getAllPosts();
+        setPosts(data);
+      } catch (error) {
+        console.error('Error fetching posts:', error)
+      }
+    }
+
     fetchUsers();
+    fetchPosts();
   }, []);
 
   const columns = [
@@ -38,11 +50,11 @@ export const UserList = () => {
     },
     {
       title: 'Posts',
-      dataIndex: 'posts',
       key: 'posts',
-      render: (posts?: Post[]) => (posts || []).map(post => (
-        <p key={post.id}>{post.title}</p>
-      )),
+      render: (text: string, record: User) => {
+        const userPosts = posts.filter(post => post.userId === record.id);
+        return userPosts.length;
+      },
     },
     {
       title: '',
@@ -63,7 +75,7 @@ export const UserList = () => {
         rowExpandable: (record: User) => record.posts?.length > 0,
         expandedRowRender: (record: User) => (
           <div>
-            {(record.posts || []).map(post => (
+            {posts.filter(post => post.userId === record.id).map(post => (
               <div key={post.id}>
                 <h3>{post.title}</h3>
                 <p>{post.content}</p>
